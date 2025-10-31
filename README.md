@@ -12,7 +12,7 @@ Watch this video explanation of Startly and how it works:
 
 ## 📸 Application Preview
 
-![Startly Application Interface](Screenshot%202025-10-31%20at%2015.49.46.png)
+![Startly Application Interface](startly-interface-preview.png)
 
 *Startly's intuitive interface for selecting presets, modules, and configuring your project*
 
