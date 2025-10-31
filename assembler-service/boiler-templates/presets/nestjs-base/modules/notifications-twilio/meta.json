@@ -1,0 +1,78 @@
+{
+  "name": "notifications-twilio",
+  "description": "Twilio integration for SMS, WhatsApp messages, and voice calls",
+  "category": "communication",
+  "required": false,
+  "deps": {
+    "twilio": "^4.0.0"
+  },
+  "devDeps": {},
+  "env": [
+    { "key": "TWILIO_ACCOUNT_SID", "required": true, "example": "" },
+    { "key": "TWILIO_AUTH_TOKEN", "required": true, "example": "" },
+    { "key": "TWILIO_PHONE_NUMBER", "required": true, "example": "" },
+    { "key": "TWILIO_WHATSAPP_NUMBER", "required": false, "example": "" }
+  ],
+  "routes": [
+    "/notifications/sms",
+    "/notifications/whatsapp",
+    "/notifications/voice",
+    "/notifications/status/:id"
+  ],
+  "dependsOn": ["config"],
+  "optionalDeps": [],
+  "qualityChecklist": ["unit-tests", "integration-tests", "README", "openapi"],
+  "filesPath": "files",
+  "conflicts": [],
+  "inject": {
+    "src/app.module.ts": {
+      "import": ["import { NotificationsModule } from '@modules/notifications/notifications.module';"],
+      "register": ["NotificationsModule"]
+    }
+  },
+  "fileStructure": [
+    {
+      "name": "notifications",
+      "type": "folder",
+      "path": "src/modules/notifications",
+      "children": [
+        {
+          "name": "dto",
+          "type": "folder",
+          "children": [
+            { "name": "index.ts", "type": "file" },
+            {
+              "name": "request",
+              "type": "folder",
+              "children": [
+                { "name": "bulk-sms.dto.ts", "type": "file" },
+                { "name": "list-calls.dto.ts", "type": "file" },
+                { "name": "list-messages.dto.ts", "type": "file" },
+                { "name": "make-call.dto.ts", "type": "file" },
+                { "name": "send-sms.dto.ts", "type": "file" },
+                { "name": "send-whatsapp.dto.ts", "type": "file" },
+                { "name": "validate-phone.dto.ts", "type": "file" }
+              ]
+            },
+            {
+              "name": "response",
+              "type": "folder",
+              "children": [
+                { "name": "bulk-sms.response.dto.ts", "type": "file" },
+                { "name": "call-list.response.dto.ts", "type": "file" },
+                { "name": "call.response.dto.ts", "type": "file" },
+                { "name": "message-list.response.dto.ts", "type": "file" },
+                { "name": "notification.response.dto.ts", "type": "file" },
+                { "name": "phone-validation.response.dto.ts", "type": "file" }
+              ]
+            }
+          ]
+        },
+        { "name": "notifications.controller.ts", "type": "file" },
+        { "name": "notifications.module.ts", "type": "file" },
+        { "name": "notifications.service.ts", "type": "file" }
+      ]
+    }
+  ],
+  "postInstall": []
+}

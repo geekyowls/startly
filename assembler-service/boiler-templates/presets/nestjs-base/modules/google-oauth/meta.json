@@ -1,0 +1,46 @@
+{
+  "name": "google-oauth",
+  "description": "Google OAuth2 authentication integration",
+  "category": "authentication",
+  "required": false,
+  "deps": {
+    "passport-google-oauth20": "^2.0.0",
+    "@nestjs/passport": "^10.0.0",
+    "googleapis": "^128.0.0"
+  },
+  "devDeps": {},
+  "env": [
+    { "key": "GOOGLE_CLIENT_ID", "required": true, "example": "123456789012-abcdefghijklmnopqrstuvwxyz123456.apps.googleusercontent.com" },
+    { "key": "GOOGLE_CLIENT_SECRET", "required": true, "example": "GOCSPX-abcdefghijklmnopqrstuvwxyz123456" },
+    { "key": "GOOGLE_CALLBACK_URL", "required": true, "example": "http://localhost:3000/auth/google/callback" }
+  ],
+  "routes": [
+    "/auth/google",
+    "/auth/google/callback"
+  ],
+  "dependsOn": ["config", "auth"],
+  "optionalDeps": [],
+  "qualityChecklist": ["unit-tests", "integration-tests", "README", "openapi"],
+  "filesPath": "files",
+  "conflicts": [],
+  "inject": {
+    "src/modules/auth/auth.module.ts": {
+      "import": ["import { GoogleOAuthModule } from './google-oauth/google-oauth.module';"],
+      "register": ["GoogleOAuthModule"]
+    }
+  },
+  "fileStructure": [
+    {
+      "name": "google-oauth",
+      "type": "folder",
+      "path": "src/modules/auth/google-oauth",
+      "children": [
+        { "name": "google-oauth.module.ts", "type": "file" },
+        { "name": "google-oauth.service.ts", "type": "file" },
+        { "name": "google-oauth.controller.ts", "type": "file" },
+        { "name": "google.strategy.ts", "type": "file" }
+      ]
+    }
+  ],
+  "postInstall": []
+}

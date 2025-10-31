@@ -1,0 +1,42 @@
+{
+  "name": "cache-memory",
+  "description": "In-memory caching service using node-cache for improved application performance in single-instance deployments",
+  "category": "cache",
+  "required": false,
+  "deps": {
+    "node-cache": "^5.1.2"
+  },
+  "devDeps": {
+    "@types/node-cache": "^4.2.5"
+  },
+  "env": [
+    { "key": "CACHE_TTL", "required": false, "example": "3600" },
+    { "key": "CACHE_CHECK_PERIOD", "required": false, "example": "600" },
+    { "key": "CACHE_MAX_KEYS", "required": false, "example": "10000" },
+    { "key": "CACHE_USE_CLONES", "required": false, "example": "false" }
+  ],
+  "routes": [],
+  "dependsOn": ["config"],
+  "optionalDeps": [],
+  "qualityChecklist": ["unit-tests", "performance-tests", "README"],
+  "filesPath": "files",
+  "conflicts": ["cache-redis"],
+  "inject": {
+    "src/app.module.ts": {
+      "import": ["import { CacheModule } from '@modules/cache/cache.module';"],
+      "register": ["CacheModule"]
+    }
+  },
+  "fileStructure": [
+    {
+      "name": "cache",
+      "type": "folder",
+      "path": "src/modules/cache",
+      "children": [
+        { "name": "cache.module.ts", "type": "file" },
+        { "name": "cache.service.ts", "type": "file" }
+      ]
+    }
+  ],
+  "postInstall": []
+}

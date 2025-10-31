@@ -1,0 +1,55 @@
+{
+  "name": "startly",
+  "version": "1.0.0",
+  "description": "A modular project generator that creates ready-to-use repositories by combining a base preset with selected feature modules",
+  "private": true,
+  "workspaces": [
+    "assembler-service",
+    "frontend"
+  ],
+  "scripts": {
+    "prepare": "husky",
+    "install:all": "npm install && npm run install:backend && npm run install:frontend",
+    "install:backend": "cd assembler-service && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd assembler-service && npm run start:dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd assembler-service && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "lint:backend": "cd assembler-service && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd assembler-service && npm test",
+    "test:frontend": "cd frontend && npm test"
+  },
+  "keywords": [
+    "boilerplate",
+    "generator",
+    "nestjs",
+    "react",
+    "templates",
+    "modular"
+  ],
+  "author": "Geeky Owls",
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "concurrently": "^9.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10"
+  },
+  "lint-staged": {
+    "assembler-service/**/*.{ts,js}": [
+      "cd assembler-service && npm run lint",
+      "cd assembler-service && npm run format"
+    ],
+    "frontend/**/*.{ts,tsx,js,jsx}": [
+      "cd frontend && npm run lint:fix",
+      "cd frontend && npm run format"
+    ]
+  }
+}

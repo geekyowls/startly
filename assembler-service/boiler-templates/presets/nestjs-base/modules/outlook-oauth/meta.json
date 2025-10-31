@@ -1,0 +1,45 @@
+{
+  "name": "outlook-oauth",
+  "description": "Microsoft/Outlook OAuth2 authentication integration",
+  "category": "authentication",
+  "required": false,
+  "deps": {
+    "passport-microsoft": "^1.0.0",
+    "@nestjs/passport": "^10.0.0"
+  },
+  "devDeps": {},
+  "env": [
+    { "key": "MICROSOFT_CLIENT_ID", "required": true, "example": "12345678-1234-1234-1234-123456789012" },
+    { "key": "MICROSOFT_CLIENT_SECRET", "required": true, "example": "abcdef~1234567890abcdef1234567890" },
+    { "key": "MICROSOFT_CALLBACK_URL", "required": true, "example": "http://localhost:3000/auth/outlook/callback" }
+  ],
+  "routes": [
+    "/auth/outlook",
+    "/auth/outlook/callback"
+  ],
+  "dependsOn": ["config", "auth"],
+  "optionalDeps": [],
+  "qualityChecklist": ["unit-tests", "integration-tests", "README", "openapi"],
+  "filesPath": "files",
+  "conflicts": [],
+  "inject": {
+    "src/modules/auth/auth.module.ts": {
+      "import": ["import { OutlookOAuthModule } from './outlook-oauth/outlook-oauth.module';"],
+      "register": ["OutlookOAuthModule"]
+    }
+  },
+  "fileStructure": [
+    {
+      "name": "outlook-oauth",
+      "type": "folder",
+      "path": "src/modules/auth/outlook-oauth",
+      "children": [
+        { "name": "outlook-oauth.module.ts", "type": "file" },
+        { "name": "outlook-oauth.service.ts", "type": "file" },
+        { "name": "outlook-oauth.controller.ts", "type": "file" },
+        { "name": "microsoft.strategy.ts", "type": "file" }
+      ]
+    }
+  ],
+  "postInstall": []
+}

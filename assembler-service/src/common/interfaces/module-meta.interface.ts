@@ -3,7 +3,7 @@ export interface ModuleMeta {
   description: string;
   deps?: Record<string, string>;
   devDeps?: Record<string, string>;
-  env?: string[];
+  env?: (string | { key: string; required: boolean; example?: string })[];
   filesPath?: string;
   conflicts?: string[];
   inject?: Record<string, {
@@ -16,6 +16,8 @@ export interface ModuleMeta {
 export interface GenerationResult {
   status: 'success' | 'error';
   outputUrl?: string;
+  downloadUrl?: string;
+  fileName?: string;
   repoUrl?: string;
   envRequired?: string[];
   error?: string;

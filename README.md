@@ -1,6 +1,14 @@
-# Dynamic Boilerplate Generator
+# Startly
 
 A modular project generator that creates ready-to-use repositories by combining a base preset with selected feature modules. The system provides deterministic assembly, GitHub integration, and support for customizable templates.
+
+## 🎥 Project Overview
+
+Watch this video explanation of Startly and how it works:
+
+[![Startly Project Overview](https://img.shields.io/badge/▶️-Watch%20Demo-blue?style=for-the-badge)](https://www.loom.com/share/a4e01610c3d54993a0c19ba5cf0acf1b)
+
+**[📹 View Project Explanation Video](https://www.loom.com/share/a4e01610c3d54993a0c19ba5cf0acf1b)**
 
 ## 🚀 Features
 
@@ -14,7 +22,7 @@ A modular project generator that creates ready-to-use repositories by combining 
 ## 📦 Project Structure
 
 ```
-dynamic-boilerplate/
+startly/
 ├── assembler-service/          # Backend API service (NestJS)
 ├── boiler-templates/           # Template repository
 │   └── presets/
@@ -74,7 +82,10 @@ dynamic-boilerplate/
 ### 1. Clone and Setup
 ```bash
 git clone <repository-url>
-cd dynamic-boilerplate
+cd startly
+
+# Install root dependencies (includes Husky for git hooks)
+npm install
 
 # Setup backend
 cd assembler-service
@@ -129,7 +140,13 @@ GITHUB_APP_PRIVATE_KEY=your_private_key
 VITE_API_URL=http://localhost:3000/api
 ```
 
-## 🧪 Testing
+## 🧪 Testing & Code Quality
+
+### Automated Code Quality
+The project uses Husky for Git hooks to ensure code quality:
+
+- **Pre-commit**: Runs linting and formatting on staged files
+- **Commit-msg**: Validates commit messages follow conventional commit format
 
 ### Backend Tests
 ```bash
@@ -137,12 +154,29 @@ cd assembler-service
 npm test                    # Run unit tests
 npm run test:watch         # Watch mode
 npm run test:cov           # Coverage report
+npm run lint               # Run ESLint
+npm run format             # Format code with Prettier
 ```
 
 ### Frontend Tests
 ```bash
 cd frontend
 npm test                   # Run tests
+npm run lint               # Run ESLint
+npm run lint:fix           # Fix ESLint issues
+npm run format             # Format code with Prettier
+```
+
+### Root Level Commands
+```bash
+# Run all linting
+npm run lint
+
+# Run all tests
+npm run test
+
+# Run both frontend and backend in development
+npm run dev
 ```
 
 ### Integration Testing
@@ -259,7 +293,7 @@ npm run build
 
 ## 📄 License
 
-This project is licensed under the ISC License.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## 🆘 Support
 
@@ -280,3 +314,5 @@ This project is licensed under the ISC License.
 ---
 
 Built with ❤️ using NestJS and React
+
+**Startly** - Generate production-ready repositories faster than ever.

@@ -1,0 +1,46 @@
+{
+  "name": "config",
+  "description": "Simplified configuration module with basic validation and environment management",
+  "category": "core",
+  "required": true,
+  "deps": {
+    "zod": "^3.22.0"
+  },
+  "devDeps": {},
+  "env": [
+    { "key": "NODE_ENV", "required": false, "example": "development" },
+    { "key": "PORT", "required": false, "example": "3000" },
+    { "key": "APP_NAME", "required": false, "example": "{{projectName}}" },
+    { "key": "API_PREFIX", "required": false, "example": "api" },
+    { "key": "CORS_ENABLED", "required": false, "example": "true" },
+    { "key": "CORS_ORIGIN", "required": false, "example": "http://localhost:3000" }
+  ],
+  "routes": [],
+  "dependsOn": [],
+  "optionalDeps": [],
+  "qualityChecklist": ["unit-tests", "README"],
+  "filesPath": "files",
+  "conflicts": [],
+  "inject": {
+    "src/app.module.ts": {
+      "import": ["import { AppConfigModule } from '@config/config.module';"],
+      "register": ["AppConfigModule"]
+    }
+  },
+  "fileStructure": [
+    {
+      "name": "config",
+      "type": "folder",
+      "path": "src/config",
+      "children": [
+        { "name": "config.module.ts", "type": "file" },
+        { "name": "config.service.ts", "type": "file" },
+        { "name": "config.schema.ts", "type": "file" },
+        { "name": "config.validation.ts", "type": "file" },
+        { "name": "configuration.ts", "type": "file" },
+        { "name": "index.ts", "type": "file" }
+      ]
+    }
+  ],
+  "postInstall": []
+}

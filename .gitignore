@@ -50,6 +50,20 @@ Thumbs.db
 # Temporary files
 temp/
 uploads/
+*.zip
+*.tar.gz
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Railway deployment files (if any remain)
+railway.json
+nixpacks.toml
 
 # Package lock files (optional - uncomment if you want to ignore them)
 # package-lock.json

@@ -1,0 +1,91 @@
+{
+  "name": "audit-log",
+  "description": "Immutable audit trail for sensitive events with @Audit() decorator and query endpoints",
+  "category": "security",
+  "required": false,
+  "deps": {
+    "rxjs": "^7.0.0"
+  },
+  "devDeps": {},
+  "env": [
+    { "key": "AUDIT_SINK", "required": false, "example": "database" },
+    { "key": "AUDIT_LOG_LEVEL", "required": false, "example": "all" },
+    { "key": "AUDIT_RETENTION_DAYS", "required": false, "example": "365" }
+  ],
+  "routes": [
+    "/audit/logs",
+    "/audit/logs/:id",
+    "/audit/correlation/:correlationId",
+    "/audit/session/:sessionId",
+    "/audit/critical",
+    "/audit/failed-attempts",
+    "/audit/statistics",
+    "/audit/export"
+  ],
+  "dependsOn": ["config", "database"],
+  "optionalDeps": [],
+  "qualityChecklist": ["unit-tests", "e2e-tests", "README", "openapi"],
+  "filesPath": "files",
+  "conflicts": [],
+  "inject": {
+    "src/app.module.ts": {
+      "import": ["import { AuditModule } from '@modules/audit/audit.module';"],
+      "register": ["AuditModule"]
+    }
+  },
+  "fileStructure": [
+    {
+      "name": "audit-log.entity.ts",
+      "type": "file",
+      "path": "src/database/entities"
+    },
+    {
+      "name": "audit-log.repository.ts",
+      "type": "file",
+      "path": "src/database/repositories"
+    },
+    {
+      "name": "audit",
+      "type": "folder",
+      "path": "src/modules/audit",
+      "children": [
+        { "name": "audit.module.ts", "type": "file" },
+        { "name": "audit.service.ts", "type": "file" },
+        { "name": "audit.controller.ts", "type": "file" },
+        { "name": "audit.decorator.ts", "type": "file" },
+        { "name": "audit.interceptor.ts", "type": "file" },
+        {
+          "name": "dto",
+          "type": "folder",
+          "children": [
+            { "name": "index.ts", "type": "file" },
+            {
+              "name": "request",
+              "type": "folder",
+              "children": [
+                { "name": "search-audit-log.dto.ts", "type": "file" },
+                { "name": "statistics.dto.ts", "type": "file" },
+                { "name": "export-audit-log.dto.ts", "type": "file" },
+                { "name": "critical-events.dto.ts", "type": "file" },
+                { "name": "failed-attempts.dto.ts", "type": "file" }
+              ]
+            },
+            {
+              "name": "response",
+              "type": "folder",
+              "children": [
+                { "name": "audit-log.response.dto.ts", "type": "file" },
+                { "name": "paginated-audit-log.response.dto.ts", "type": "file" },
+                { "name": "audit-statistics.response.dto.ts", "type": "file" },
+                { "name": "export.response.dto.ts", "type": "file" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "postInstall": [
+    "echo 'Audit module installed. Use @Audit() decorator to track sensitive events.'"
+  ]
+}

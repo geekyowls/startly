@@ -1,0 +1,88 @@
+{
+  "name": "file-storage",
+  "description": "Universal file storage service supporting AWS S3, MinIO, DigitalOcean Spaces, and any S3-compatible storage provider",
+  "category": "storage",
+  "required": false,
+  "deps": {
+    "@aws-sdk/client-s3": "^3.0.0",
+    "@aws-sdk/s3-request-presigner": "^3.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "uuid": "^9.0.0"
+  },
+  "devDeps": {
+    "@types/uuid": "^9.0.0",
+    "@types/multer": "^1.4.7"
+  },
+  "env": [
+    { "key": "STORAGE_PROVIDER", "required": false, "example": "aws-s3", "description": "Storage provider: aws-s3, minio, digitalocean-spaces, s3-compatible (auto-detected if not set)" },
+    { "key": "STORAGE_ENDPOINT", "required": false, "example": "https://nyc3.digitaloceanspaces.com", "description": "Custom endpoint for S3-compatible services (MinIO, DigitalOcean, etc.)" },
+    { "key": "STORAGE_BUCKET", "required": true, "example": "my-app-bucket", "description": "Storage bucket name" },
+    { "key": "STORAGE_REGION", "required": true, "example": "us-east-1", "description": "Storage region" },
+    { "key": "STORAGE_ACCESS_KEY", "required": true, "example": "AKIA1234567890", "description": "Storage access key" },
+    { "key": "STORAGE_SECRET_KEY", "required": true, "example": "your-secret-key", "description": "Storage secret key" },
+    { "key": "STORAGE_FORCE_PATH_STYLE", "required": false, "example": "true", "description": "Force path-style URLs (required for MinIO)" },
+    { "key": "AWS_ACCESS_KEY_ID", "required": false, "example": "AKIA1234567890", "description": "Legacy fallback for STORAGE_ACCESS_KEY" },
+    { "key": "AWS_SECRET_ACCESS_KEY", "required": false, "example": "your-secret-key", "description": "Legacy fallback for STORAGE_SECRET_KEY" },
+    { "key": "AWS_S3_BUCKET", "required": false, "example": "my-app-bucket", "description": "Legacy fallback for STORAGE_BUCKET" },
+    { "key": "AWS_REGION", "required": false, "example": "us-east-1", "description": "Legacy fallback for STORAGE_REGION" }
+  ],
+  "routes": [
+    "/files/upload",
+    "/files/:id",
+    "/files/:id/download",
+    "/files/:id/presigned-url"
+  ],
+  "dependsOn": ["config"],
+  "optionalDeps": [],
+  "qualityChecklist": ["unit-tests", "integration-tests", "README", "openapi"],
+  "filesPath": "files",
+  "conflicts": [],
+  "inject": {
+    "src/app.module.ts": {
+      "import": ["import { FilesModule } from '@modules/files/files.module';"],
+      "register": ["FilesModule"]
+    }
+  },
+  "fileStructure": [
+    {
+      "name": "files",
+      "type": "folder",
+      "path": "src/modules/files",
+      "children": [
+        {
+          "name": "dto",
+          "type": "folder",
+          "children": [
+            { "name": "index.ts", "type": "file" },
+            {
+              "name": "request",
+              "type": "folder",
+              "children": [
+                { "name": "download-url.dto.ts", "type": "file" },
+                { "name": "upload-file.dto.ts", "type": "file" },
+                { "name": "upload-url.dto.ts", "type": "file" },
+                { "name": "validate-file.dto.ts", "type": "file" }
+              ]
+            },
+            {
+              "name": "response",
+              "type": "folder",
+              "children": [
+                { "name": "download-url.response.dto.ts", "type": "file" },
+                { "name": "file-delete.response.dto.ts", "type": "file" },
+                { "name": "file-metadata.response.dto.ts", "type": "file" },
+                { "name": "file-upload.response.dto.ts", "type": "file" },
+                { "name": "file-validation.response.dto.ts", "type": "file" },
+                { "name": "upload-url.response.dto.ts", "type": "file" }
+              ]
+            }
+          ]
+        },
+        { "name": "files.controller.ts", "type": "file" },
+        { "name": "files.module.ts", "type": "file" },
+        { "name": "files.service.ts", "type": "file" }
+      ]
+    }
+  ],
+  "postInstall": []
+}
