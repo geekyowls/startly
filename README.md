@@ -10,6 +10,12 @@ Watch this video explanation of Startly and how it works:
 
 **[📹 View Project Explanation Video](https://www.loom.com/share/a4e01610c3d54993a0c19ba5cf0acf1b)**
 
+## 📸 Application Preview
+
+![Startly Application Interface](Screenshot%202025-10-31%20at%2015.49.46.png)
+
+*Startly's intuitive interface for selecting presets, modules, and configuring your project*
+
 ## 🚀 Features
 
 - **Modular Architecture**: Mix and match feature modules with base presets
