@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -20,6 +20,7 @@ export interface FileUploadResult {
   bucket: string;
   contentType: string;
   size: number;
+  provider: string;
 }
 
 export interface FileMetadata {
@@ -31,33 +32,90 @@ export interface FileMetadata {
   etag: string;
   url: string;
   publicUrl?: string;
+  provider: string;
 }
 
 @Injectable()
 export class FilesService {
+  private readonly logger = new Logger(FilesService.name);
   private s3Client: S3Client;
   private bucketName: string;
   private region: string;
+  private endpoint?: string;
+  private provider: string;
+  private forcePathStyle: boolean;
 
   constructor(private configService: ConfigService) {
-    this.bucketName = this.configService.get<string>('AWS_S3_BUCKET');
-    this.region = this.configService.get<string>('AWS_REGION') || 'us-east-1';
+    this.initializeStorageConfig();
+    this.createS3Client();
+  }
+
+  private initializeStorageConfig(): void {
+    // Universal storage configuration with fallbacks
+    this.bucketName = this.configService.get<string>('STORAGE_BUCKET')
+      || this.configService.get<string>('AWS_S3_BUCKET')
+      || '';
+
+    this.region = this.configService.get<string>('STORAGE_REGION')
+      || this.configService.get<string>('AWS_REGION')
+      || 'us-east-1';
+
+    this.endpoint = this.configService.get<string>('STORAGE_ENDPOINT');
+    this.forcePathStyle = this.configService.get<boolean>('STORAGE_FORCE_PATH_STYLE') || false;
+
+    // Auto-detect provider based on configuration
+    this.provider = this.detectProvider();
 
     if (!this.bucketName) {
-      throw new Error('AWS_S3_BUCKET is required for S3 file service');
+      throw new Error('Storage bucket is required. Set STORAGE_BUCKET or AWS_S3_BUCKET');
     }
 
-    this.s3Client = new S3Client({
+    this.logger.log(`Initialized storage service with provider: ${this.provider}`);
+  }
+
+  private detectProvider(): string {
+    const explicitProvider = this.configService.get<string>('STORAGE_PROVIDER');
+    if (explicitProvider) return explicitProvider;
+
+    if (!this.endpoint) return 'aws-s3';
+
+    // Auto-detect based on endpoint
+    if (this.endpoint.includes('digitaloceanspaces.com')) return 'digitalocean-spaces';
+    if (this.endpoint.includes('minio') || this.endpoint.includes('localhost') || this.endpoint.includes('127.0.0.1')) return 'minio';
+
+    return 's3-compatible';
+  }
+
+  private createS3Client(): void {
+    const accessKeyId = this.configService.get<string>('STORAGE_ACCESS_KEY')
+      || this.configService.get<string>('AWS_ACCESS_KEY_ID');
+
+    const secretAccessKey = this.configService.get<string>('STORAGE_SECRET_KEY')
+      || this.configService.get<string>('AWS_SECRET_ACCESS_KEY');
+
+    if (!accessKeyId || !secretAccessKey) {
+      throw new Error('Storage credentials are required. Set STORAGE_ACCESS_KEY/STORAGE_SECRET_KEY or AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY');
+    }
+
+    const clientConfig: any = {
       region: this.region,
       credentials: {
-        accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY'),
+        accessKeyId,
+        secretAccessKey,
       },
-    });
+    };
+
+    // Configure for S3-compatible services
+    if (this.endpoint) {
+      clientConfig.endpoint = this.endpoint;
+      clientConfig.forcePathStyle = this.forcePathStyle || this.provider === 'minio';
+    }
+
+    this.s3Client = new S3Client(clientConfig);
   }
 
   /**
-   * Upload file buffer to S3
+   * Upload file buffer to storage
    */
   async uploadFile(
     buffer: Buffer,
@@ -89,6 +147,7 @@ export class FilesService {
         Metadata: {
           originalName: originalName,
           uploadedAt: new Date().toISOString(),
+          provider: this.provider,
         },
       });
 
@@ -104,9 +163,10 @@ export class FilesService {
         bucket: this.bucketName,
         contentType: finalContentType,
         size: buffer.length,
+        provider: this.provider,
       };
     } catch (error) {
-      console.error('Failed to upload file to S3:', error);
+      this.logger.error('Failed to upload file to storage', error);
       throw new BadRequestException('Failed to upload file');
     }
   }
@@ -123,7 +183,7 @@ export class FilesService {
 
       return await getSignedUrl(this.s3Client, command, { expiresIn });
     } catch (error) {
-      console.error('Failed to generate signed URL:', error);
+      this.logger.error('Failed to generate signed URL', error);
       throw new BadRequestException('Failed to generate file URL');
     }
   }
@@ -145,7 +205,7 @@ export class FilesService {
 
       return await getSignedUrl(this.s3Client, command, { expiresIn });
     } catch (error) {
-      console.error('Failed to generate upload URL:', error);
+      this.logger.error('Failed to generate upload URL', error);
       throw new BadRequestException('Failed to generate upload URL');
     }
   }
@@ -162,7 +222,7 @@ export class FilesService {
 
       const response = await this.s3Client.send(command);
       const url = await this.getSignedUrl(key, 3600);
-      const publicUrl = response.ACL === 'public-read' ? this.getPublicUrl(key) : undefined;
+      const publicUrl = response.Metadata?.acl === 'public-read' ? this.getPublicUrl(key) : undefined;
 
       return {
         key,
@@ -173,15 +233,16 @@ export class FilesService {
         etag: response.ETag || '',
         url,
         publicUrl,
+        provider: this.provider,
       };
     } catch (error) {
-      console.error('Failed to get file metadata:', error);
+      this.logger.error('Failed to get file metadata', error);
       throw new BadRequestException('File not found');
     }
   }
 
   /**
-   * Delete file from S3
+   * Delete file from storage
    */
   async deleteFile(key: string): Promise<void> {
     try {
@@ -192,7 +253,7 @@ export class FilesService {
 
       await this.s3Client.send(command);
     } catch (error) {
-      console.error('Failed to delete file:', error);
+      this.logger.error('Failed to delete file', error);
       throw new BadRequestException('Failed to delete file');
     }
   }
@@ -200,8 +261,31 @@ export class FilesService {
   /**
    * Get public URL for file (if bucket/object is public)
    */
-  private getPublicUrl(key: string): string {
-    return `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${key}`;
+  getPublicUrl(key: string): string {
+    switch (this.provider) {
+      case 'aws-s3':
+        return `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${key}`;
+
+      case 'digitalocean-spaces':
+        return `https://${this.bucketName}.${this.region}.digitaloceanspaces.com/${key}`;
+
+      case 'minio':
+      case 's3-compatible':
+        if (this.endpoint) {
+          const baseUrl = this.endpoint.replace(/^https?:\/\//, '');
+          const protocol = this.endpoint.startsWith('https') ? 'https' : 'http';
+
+          if (this.forcePathStyle) {
+            return `${protocol}://${baseUrl}/${this.bucketName}/${key}`;
+          } else {
+            return `${protocol}://${this.bucketName}.${baseUrl}/${key}`;
+          }
+        }
+        return `https://${this.bucketName}/${key}`;
+
+      default:
+        return `https://${this.bucketName}.s3.amazonaws.com/${key}`;
+    }
   }
 
   /**
