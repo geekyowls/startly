@@ -11,7 +11,7 @@ export class HealthController {
     return {
       status: 'ok',
       timestamp: new Date().toISOString(),
-      service: 'assembler-service',
+      service: 'startly-backend',
       version: '1.0.0',
     };
   }

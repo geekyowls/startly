@@ -3,8 +3,8 @@ import { INestApplication } from '@nestjs/common';
 
 export function setupSwagger(app: INestApplication): void {
   const config = new DocumentBuilder()
-    .setTitle('Assembler Service API')
-    .setDescription('Dynamic Boilerplate Generator - Backend API Service')
+    .setTitle('Startly API')
+    .setDescription('Startly - Backend API Service')
     .setVersion('1.0.0')
     .addTag('assembler', 'Project generation and assembly operations')
     .addTag('storage', 'File and template storage operations')
@@ -35,6 +35,6 @@ export function setupSwagger(app: INestApplication): void {
       operationsSorter: 'alpha',
     },
     customfavIcon: '/favicon.ico',
-    customSiteTitle: 'Assembler Service API Documentation',
+    customSiteTitle: 'Startly API Documentation',
   });
 }

@@ -1,7 +1,7 @@
 {
-  "name": "assembler-service",
+  "name": "startly-backend",
   "version": "1.0.0",
-  "description": "Dynamic Boilerplate Generator - Backend API Service",
+  "description": "Startly - Backend API Service",
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

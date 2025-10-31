@@ -1,6 +1,6 @@
-# Contributing to Dynamic Boilerplate Generator
+# Contributing to Startly
 
-Thank you for your interest in contributing to the Dynamic Boilerplate Generator! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to Startly! This document provides guidelines and information for contributors.
 
 ## 🚀 Getting Started
 
@@ -13,8 +13,8 @@ Thank you for your interest in contributing to the Dynamic Boilerplate Generator
 
 1. **Fork and Clone**
    ```bash
-   git clone https://github.com/your-username/dynamic-boilerplate.git
-   cd dynamic-boilerplate
+   git clone https://github.com/your-username/startly.git
+   cd startly
    ```
 
 2. **Install Dependencies**
@@ -122,7 +122,7 @@ Types:
 ## 🏗 Project Structure
 
 ```
-dynamic-boilerplate/
+startly/
 ├── assembler-service/          # NestJS backend
 │   ├── src/                   # Source code
 │   ├── boiler-templates/      # Template system
@@ -269,4 +269,4 @@ Contributors will be:
 - Mentioned in release notes for significant contributions
 - Invited to join the maintainers team for consistent contributors
 
-Thank you for contributing to the Dynamic Boilerplate Generator! 🚀
+Thank you for contributing to Startly! 🚀

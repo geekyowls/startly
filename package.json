@@ -1,5 +1,5 @@
 {
-  "name": "dynamic-boilerplate",
+  "name": "startly",
   "version": "1.0.0",
   "description": "A modular project generator that creates ready-to-use repositories by combining a base preset with selected feature modules",
   "private": true,

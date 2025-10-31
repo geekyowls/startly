@@ -7,9 +7,8 @@ import { FileTreePreview } from "./FileTreePreview";
 import { GenerateButton } from "./GenerateButton";
 import { ApiService } from "../services/api.service";
 import type { PresetInfo, GenerateRequest } from "../types";
-import { Loader2, LogOut, History, Zap } from "lucide-react";
+import { Loader2, LogOut, Zap } from "lucide-react";
 import { useAuth } from '../contexts/AuthContext';
-import { ProjectHistory } from './ProjectHistory';
 
 export function MainContent() {
   const { user, logout } = useAuth();
@@ -20,7 +19,6 @@ export function MainContent() {
   const [author, setAuthor] = useState<string>(user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.email || "");
   const [loading, setLoading] = useState<boolean>(true);
   const [envRequired, setEnvRequired] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<'generator' | 'history'>('generator');
 
   useEffect(() => {
     loadPresets();
@@ -202,10 +200,9 @@ export function MainContent() {
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 tracking-tight">
-              Dynamic Boilerplate{" "}
-              <span className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                Generator
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">
+              <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                Startly
               </span>
             </h1>
 
@@ -216,43 +213,9 @@ export function MainContent() {
               Select your stack, choose your modules, and ship faster.
             </p>
 
-            {/* Tab Navigation */}
-            <motion.div
-              className="flex justify-center mt-8"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <div className="flex items-center bg-secondary rounded-lg p-1">
-                <button
-                  onClick={() => setActiveTab('generator')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    activeTab === 'generator'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  <Zap className="h-4 w-4" />
-                  Generator
-                </button>
-                <button
-                  onClick={() => setActiveTab('history')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    activeTab === 'history'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  <History className="h-4 w-4" />
-                  Project History
-                </button>
-              </div>
-            </motion.div>
           </motion.div>
 
-          {/* Tab Content */}
-          <AnimatePresence mode="wait">
-            {activeTab === 'generator' ? (
+          {/* Generator Content */}
               <motion.div
                 key="generator"
                 initial={{ opacity: 0, y: 20 }}
@@ -345,18 +308,6 @@ export function MainContent() {
             </motion.div>
           </div>
               </motion.div>
-            ) : (
-              <motion.div
-                key="history"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ProjectHistory />
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </div>
     </div>

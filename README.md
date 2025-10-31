@@ -1,4 +1,4 @@
-# Dynamic Boilerplate Generator
+# Startly
 
 A modular project generator that creates ready-to-use repositories by combining a base preset with selected feature modules. The system provides deterministic assembly, GitHub integration, and support for customizable templates.
 
@@ -14,7 +14,7 @@ A modular project generator that creates ready-to-use repositories by combining 
 ## 📦 Project Structure
 
 ```
-dynamic-boilerplate/
+startly/
 ├── assembler-service/          # Backend API service (NestJS)
 ├── boiler-templates/           # Template repository
 │   └── presets/
@@ -74,7 +74,7 @@ dynamic-boilerplate/
 ### 1. Clone and Setup
 ```bash
 git clone <repository-url>
-cd dynamic-boilerplate
+cd startly
 
 # Install root dependencies (includes Husky for git hooks)
 npm install
@@ -306,3 +306,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ---
 
 Built with ❤️ using NestJS and React
+
+**Startly** - Generate production-ready repositories faster than ever.
