@@ -2,6 +2,14 @@
 
 A modular project generator that creates ready-to-use repositories by combining a base preset with selected feature modules. The system provides deterministic assembly, GitHub integration, and support for customizable templates.
 
+## 🎥 Project Overview
+
+Watch this video explanation of Startly and how it works:
+
+[![Startly Project Overview](https://img.shields.io/badge/▶️-Watch%20Demo-blue?style=for-the-badge)](https://www.loom.com/share/a4e01610c3d54993a0c19ba5cf0acf1b)
+
+**[📹 View Project Explanation Video](https://www.loom.com/share/a4e01610c3d54993a0c19ba5cf0acf1b)**
+
 ## 🚀 Features
 
 - **Modular Architecture**: Mix and match feature modules with base presets
