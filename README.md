@@ -76,6 +76,9 @@ dynamic-boilerplate/
 git clone <repository-url>
 cd dynamic-boilerplate
 
+# Install root dependencies (includes Husky for git hooks)
+npm install
+
 # Setup backend
 cd assembler-service
 cp .env.example .env
@@ -129,7 +132,13 @@ GITHUB_APP_PRIVATE_KEY=your_private_key
 VITE_API_URL=http://localhost:3000/api
 ```
 
-## 🧪 Testing
+## 🧪 Testing & Code Quality
+
+### Automated Code Quality
+The project uses Husky for Git hooks to ensure code quality:
+
+- **Pre-commit**: Runs linting and formatting on staged files
+- **Commit-msg**: Validates commit messages follow conventional commit format
 
 ### Backend Tests
 ```bash
@@ -137,12 +146,29 @@ cd assembler-service
 npm test                    # Run unit tests
 npm run test:watch         # Watch mode
 npm run test:cov           # Coverage report
+npm run lint               # Run ESLint
+npm run format             # Format code with Prettier
 ```
 
 ### Frontend Tests
 ```bash
 cd frontend
 npm test                   # Run tests
+npm run lint               # Run ESLint
+npm run lint:fix           # Fix ESLint issues
+npm run format             # Format code with Prettier
+```
+
+### Root Level Commands
+```bash
+# Run all linting
+npm run lint
+
+# Run all tests
+npm run test
+
+# Run both frontend and backend in development
+npm run dev
 ```
 
 ### Integration Testing
@@ -259,7 +285,7 @@ npm run build
 
 ## 📄 License
 
-This project is licensed under the ISC License.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## 🆘 Support
 
@@ -280,15 +306,3 @@ This project is licensed under the ISC License.
 ---
 
 Built with ❤️ using NestJS and React
-
-
-1. Implement a google login for project. 
-2. As soon as page is opened if google login is not done show popup for google login. Add simple user entities for it. 
-3. One call back is verifeid redirect back to frontend with logged in google
-
-
-
-1. Remove all database realated modules from `base` folder in `nestjs-base` project. 
-2. Strcuture database module present in `nestjs-base/modules`. After generation database should be present in modules above database having entities, repositories, seed and all. 
-3. Use config service to get variables
-4. If database url is present then use that else other variables make template accoridgly

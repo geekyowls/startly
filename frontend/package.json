@@ -10,6 +10,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -44,7 +46,10 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
     "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
     "serve": "^14.2.5",
     "tailwindcss": "^4.1.13",
     "typescript": "~5.8.3",
